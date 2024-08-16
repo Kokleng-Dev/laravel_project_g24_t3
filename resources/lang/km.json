@@ -2,5 +2,16 @@
     "Home Page" : "ផ្ទះ",
     "Dashboard" : "ទំព័រមុខ",
     "Logout Successfully" : "ការចាកចេញរបស់អ្នកទទួលបានជោគជ័យ",
-    "Chanage Language Successfully" : "ផ្លាស់ប្ដូរភាសាជោគជ័យ"
+    "Chanage Language Successfully" : "ផ្លាស់ប្ដូរភាសាជោគជ័យ",
+    "Are you sure ?" : "តើអ្នកចង់ធ្វើការលុបទិន្នន័យនេះមែនទែ?",
+    "Yes" : "បាទ/ចាស",
+    "No" : "ទេ",
+    "Edit" : "កែប្រែ",
+    "Delete" : "លុប",
+    "Create" : "បង្កើត",
+    "Update" : "ធ្វើបច្ចុប្បន្នភាព",
+    "Submit" : "បញ្ជូន",
+    "Name" : "ឈ្មោះ",
+    "Action" : "សកម្មភាព",
+    "Role" : "តួនាទី"
 }

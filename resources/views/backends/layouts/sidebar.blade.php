@@ -71,6 +71,53 @@
                         </li>
                     </ul>
                 </li>
+                @php
+                    $settingManagements = [
+                        'admin.role',
+                        'admin.role.create',
+                        'admin.role.edit',
+                        'admin.user',
+                        'admin.user.create',
+                        'admin.user.edit'
+                    ];
+                @endphp
+                <li class="nav-item {{  in_array(request()->route()->getName(), $settingManagements) ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link
+                        {{ in_array(request()->route()->getName(), $settingManagements) ? 'active' : '' }}
+                    ">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            {{  __('Settings') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.role') }}" class="nav-link {{
+                                request()->route()->getName() == 'admin.role' ||
+                                 request()->route()->getName() == 'admin.role.create' ||
+                                 request()->route()->getName() == 'admin.role.edit' ? 'active' : ''
+                            }}">
+                                <i class="nav-icon fas fa-arrow-alt-circle-right"></i>
+                                <p>
+                                   {{ __('Role') }}
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.user') }}" class="nav-link {{
+                                request()->route()->getName() == 'admin.user' ||
+                                 request()->route()->getName() == 'admin.user.create' ||
+                                 request()->route()->getName() == 'admin.user.edit' ? 'active' : ''
+                            }}">
+                                <i class="nav-icon fas fa-arrow-alt-circle-right"></i>
+                                <p>
+                                   {{ __('User') }}
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

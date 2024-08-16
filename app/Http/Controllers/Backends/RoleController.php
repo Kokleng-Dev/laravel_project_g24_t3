@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers\Backends;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use DB;
+
+class RoleController extends Controller
+{
+    public function index(){
+
+
+        $data['roles'] = DB::table('roles')->paginate(10);
+
+        return view('backends.roles.index', $data);
+    }
+    public function create(){
+
+        return view('backends.roles.create');
+    }
+    public function store(Request $r){
+
+        $name = $r->name;
+
+        $i = DB::table('roles')->insert([
+            'name' => $name,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+
+        if($i == true){
+            return redirect()->route('admin.role')->with(['status' => 'success', 'sms' => __('Insert Successfully')]);
+        } else {
+            return redirect()->route('admin.role')->with(['status' => 'error', 'sms' => __('Insert Fails')]);
+        }
+    }
+    public function edit($role_id){
+        $data['role'] = DB::table('roles')->find($role_id);
+
+        return view('backends.roles.edit', $data);
+    }
+    public function update(Request $r, $role_id){
+        $u = DB::table('roles')->where('id', $role_id)->update([
+            'name' => $r->name
+        ]);
+
+        if($u == true){
+            return redirect()->route('admin.role')->with(['status' => 'success', 'sms' => __('Update Successfully')]);
+        } else {
+            return redirect()->route('admin.role')->with(['status' => 'warning', 'sms' => __('No Update')]);
+        }
+    }
+    public function delete($role_id){
+        $find = DB::table('users')->where('role_id',$role_id)->exists();
+        if($find){
+            return redirect()->route('admin.role')->with(['status' => 'warning', 'sms' => __('This data is being used !!! Can not delete it, please delete every user which belongs to this role first')]);
+        }
+        $d = DB::table('roles')->where('id', $role_id)->delete();
+        if($d == true){
+            return redirect()->route('admin.role')->with(['status' => 'success', 'sms' => __('Delete Successfully')]);
+        } else {
+            return redirect()->route('admin.role')->with(['status' => 'warning', 'sms' => __('Delete Fail')]);
+        }
+    }
+}
