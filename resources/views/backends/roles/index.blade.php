@@ -24,6 +24,8 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $role->name }}</td>
                             <td>
+                                <a href="{{ route('admin.role.permission', $role->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-key"></i> {{__('Permission')}}</a>
+
                                 <a href="{{ route('admin.role.edit', $role->id) }}" class="btn btn-sm btn-success"><i class="fa fa-pen"></i> {{__('Edit')}}</a>
 
                                 @php

@@ -10,7 +10,6 @@ class RoleController extends Controller
 {
     public function index(){
 
-
         $data['roles'] = DB::table('roles')->paginate(10);
 
         return view('backends.roles.index', $data);
@@ -62,4 +61,77 @@ class RoleController extends Controller
             return redirect()->route('admin.role')->with(['status' => 'warning', 'sms' => __('Delete Fail')]);
         }
     }
+    public function permission($role_id){
+
+        $data['role_permissions'] = DB::table('permissions')
+                ->leftJoinSub(DB::table("role_permissions")->where('role_id', $role_id), 't1', function($join){
+                    $join->on('t1.permission_id','permissions.id');
+                })
+                ->select(
+                    'permissions.*',
+                    DB::raw('IFNULL(t1.list,0) as list'),
+                    DB::raw('IFNULL(t1.insert,0) as store'),
+                    DB::raw('IFNULL(t1.update,0) as edit'),
+                    DB::raw('IFNULL(t1.delete,0) as remove'),
+                    DB::raw('IFNULL(t1.id,0) as role_permission_id'),
+                )
+                ->get();
+
+        $data['role_id'] = $role_id;
+        return view('backends.roles.permissions.index', $data);
+    }
+
+    public function updatePermission(Request $r, $role_id){
+
+        DB::beginTransaction();
+        try {
+            $role_permission_name = $r->permission;
+            $role_permission_id = $r->role_permission_id;
+            $role_permission_value = $r->role_permission_value;
+
+            $permission_id = $r->permission_id;
+
+            // insert if no role permission id
+            if($role_permission_id == 0){
+                 DB::table('role_permissions')->insert([
+                    'role_id' => $role_id,
+                    'permission_id' => $permission_id,
+                    'list' => $role_permission_name == 'list' ? $role_permission_value : 0,
+                    'update' => $role_permission_name == 'edit' ? $role_permission_value : 0,
+                    'insert' => $role_permission_name == 'store' ? $role_permission_value : 0,
+                    'delete' => $role_permission_name == 'remove' ? $role_permission_value : 0
+                 ]);
+            } else {
+                $data = [];
+                if($role_permission_name == 'list'){
+                    $data['list'] = $role_permission_value;
+                } else if ($role_permission_name == 'edit'){
+                    $data['update'] = $role_permission_value;
+                } else if ($role_permission_name == 'store'){
+                    $data['insert'] = $role_permission_value;
+                } else{
+                    $data['delete'] = $role_permission_value;
+                }
+
+                DB::table('role_permissions')->where([
+                    'role_id' => $role_id,
+                    'id' => $role_permission_id,
+                    'permission_id' => $permission_id
+                ])->update($data);
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with(['status' => 'success', 'sms' => __('Update Successfully')]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            return redirect()->back()->with(['status' => 'error', 'sms' => $th->getMessage()]);
+        }
+
+    }
 }
+
+// permission -> role_permission => permissions + where_id => null
+
+// permission -> (role_permissions where role_id = 123) => permission + ()

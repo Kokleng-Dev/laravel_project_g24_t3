@@ -8,7 +8,9 @@
         <h2><i class="fa fa-users"></i> {{__('User')}}</h2>
     </div>
     <div class="card-header">
+        @if(checkPermission('user','create'))
         <a href="{{route('admin.user.create')}}" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> {{__('Create')}}</a>
+        @endif
         <div class="table-responsive my-2">
             <table class="table table-sm table-hover table-bordered text-center">
                 <thead>
@@ -38,14 +40,18 @@
                                 @endif
                             </td>
                             <td>
+                             @if(checkPermission('user','edit'))
                                 <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm btn-success"><i class="fa fa-pen"></i> {{__('Edit')}}</a>
+                            @endif
 
-                                @php
-                                    $btnDelete = '<a href="' . route('admin.user.delete', $user->id) . '" class="btn btn-sm btn-danger"> ' . __('Yes') . '</a>';
-                                    $btnDelete .= '<span class="btn btn-sm btn-dark ml-1 popNo">'. __('No') .'</span>';
-                                @endphp
+                                @if(checkPermission('user','delete'))
+                                    @php
+                                        $btnDelete = '<a href="' . route('admin.user.delete', $user->id) . '" class="btn btn-sm btn-danger"> ' . __('Yes') . '</a>';
+                                        $btnDelete .= '<span class="btn btn-sm btn-dark ml-1 popNo">'. __('No') .'</span>';
+                                    @endphp
 
-                                <button type="button" class="btn btn-sm btn-danger pop" data-toggle="popover" data-trigger="focus" title="{{__('Are you sure ?')}}" data-html="true" data-content="<div class='text-center'>{{ $btnDelete }}</div>"><i class="fa fa-trash"></i> {{__('Delete')}}</button>
+                                    <button type="button" class="btn btn-sm btn-danger pop" data-toggle="popover" data-trigger="focus" title="{{__('Are you sure ?')}}" data-html="true" data-content="<div class='text-center'>{{ $btnDelete }}</div>"><i class="fa fa-trash"></i> {{__('Delete')}}</button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

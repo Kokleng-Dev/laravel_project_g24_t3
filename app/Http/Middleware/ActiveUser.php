@@ -21,9 +21,8 @@ class ActiveUser
         $find = DB::table('users')->find(auth()->user()->id);
 
         if($find->status == 0){
-            session()->flash('status', 'warning');
-            session()->flash('sms' , __('Your account now is inactive, please contact to admin !!!'));
             Auth::logout();
+            return redirect()->route('login')->with(['status' => 'warning', 'sms' => __('Your account now is inactive, please contact to admin !!!')]);
         }
 
         return $next($request);

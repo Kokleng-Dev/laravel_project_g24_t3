@@ -15,7 +15,7 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{ userAuth()->name }}</a>
             </div>
         </div>
 
@@ -24,7 +24,14 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.permission') }}" class="nav-link {{ request()->route()->getName() == 'admin.permission' || request()->route()->getName() == 'admin.permission.create' || request()->route()->getName() == 'admin.permission.edit' ? 'active' : '' }}">
+                        <i class="nav-icon fa fa-user-check"></i>
+                        <p>
+                            {{ __('Permission') }}
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.home') }}" class="nav-link {{ request()->route()->getName() == 'admin.home' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
@@ -51,15 +58,18 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.product.category') }}" class="nav-link {{ request()->route()->getName() == 'admin.product.category' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>
-                                   {{ __('lb.product_category') }}
-                                    {{-- <span class="right badge badge-danger">New</span> --}}
-                                </p>
-                            </a>
-                        </li>
+                        @if(checkPermission('product_category','view'))
+                            <li class="nav-item">
+                                <a href="{{ route('admin.product.category') }}" class="nav-link {{ request()->route()->getName() == 'admin.product.category' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                    {{ __('lb.product_category') }}
+                                        {{-- <span class="right badge badge-danger">New</span> --}}
+                                    </p>
+                                </a>
+                            </li>
+                        @endif
+                        @if(checkPermission('product','view'))
                         <li class="nav-item">
                             <a href="{{ route('admin.product') }}" class="nav-link {{ request()->route()->getName() == 'admin.product' ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-home"></i>
@@ -69,6 +79,7 @@
                                 </p>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
                 @php
@@ -76,6 +87,7 @@
                         'admin.role',
                         'admin.role.create',
                         'admin.role.edit',
+                        'admin.role.permission',
                         'admin.user',
                         'admin.user.create',
                         'admin.user.edit'
@@ -92,11 +104,13 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @if(checkPermission('role','view'))
                         <li class="nav-item">
                             <a href="{{ route('admin.role') }}" class="nav-link {{
                                 request()->route()->getName() == 'admin.role' ||
                                  request()->route()->getName() == 'admin.role.create' ||
-                                 request()->route()->getName() == 'admin.role.edit' ? 'active' : ''
+                                 request()->route()->getName() == 'admin.role.edit' ||
+                                 request()->route()->getName() == 'admin.role.permission' ? 'active' : ''
                             }}">
                                 <i class="nav-icon fas fa-arrow-alt-circle-right"></i>
                                 <p>
@@ -104,6 +118,8 @@
                                 </p>
                             </a>
                         </li>
+                        @endif
+                        @if(checkPermission('user','view'))
                         <li class="nav-item">
                             <a href="{{ route('admin.user') }}" class="nav-link {{
                                 request()->route()->getName() == 'admin.user' ||
@@ -116,6 +132,7 @@
                                 </p>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
             </ul>

@@ -41,15 +41,6 @@ class LoginController extends Controller
     public function username()
     {
 
-
-        $find = DB::table('users')->where('username',request()->get('username'))->first();
-        if($find->status == 0){
-            session()->flash('status','error');
-            session()->flash('sms', __('Inactive Account'));
-
-            return redirect()->back();
-        }
-
         session()->flash('status','success');
         session()->flash('sms', __('Login Successfully'));
 
