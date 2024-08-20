@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Language;
 use App\Http\Middleware\ActiveUser;
 use App\Http\Middleware\UserPermission;
+use App\Http\Middleware\IsDeveloper;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -23,7 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'setLanguage' => Language::class,
-            'UserPermission' => UserPermission::class
+            'UserPermission' => UserPermission::class,
+            'IsDeveloper' => IsDeveloper::class
         ]);
 
 

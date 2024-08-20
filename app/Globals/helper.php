@@ -36,4 +36,8 @@ function userAuth(){
 
     return $user;
 }
+
+function company(){
+    return DB::table('companies')->find(1);
+}
 ?>

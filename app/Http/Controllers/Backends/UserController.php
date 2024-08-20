@@ -7,20 +7,26 @@ use Illuminate\Http\Request;
 use DB;
 use Hash;
 use Validator;
+use Storage;
 
 class UserController extends Controller
 {
     public function index(){
 
         $data['users'] = DB::table('users')
-                    ->join('roles','roles.id','users.role_id')
-                    ->select('users.*','roles.name as role_name')
+                    ->join('roles','roles.id','users.role_id');
+        if(auth()->user()->id != 1){
+            $data['users'] = $data['users']
+                    ->where('users.id','!=',1);
+        }
+
+        $data['users'] = $data['users']->select('users.*','roles.name as role_name')
                     ->paginate(10);
 
         return view('backends.users.index', $data);
     }
     public function create(){
-        $data['roles'] = DB::table('roles')->get();
+        $data['roles'] = DB::table('roles')->where('id','!=', auth()->user()->id == 1 ? null : 1)->get();
         return view('backends.users.create', $data);
     }
     public function store(Request $r){
@@ -42,13 +48,15 @@ class UserController extends Controller
         $email = $r->email;
         $role_id = $r->role_id;
 
+
         $i = DB::table('users')->insert([
             'name' => $name,
             'username' => $username,
             'password' => $password,
             'email' => $email,
             'role_id' => $role_id,
-            'created_at' => date('Y-m-d H:i:s')
+            'created_at' => date('Y-m-d H:i:s'),
+            'photo' => $r->hasFile('photo') ? $r->file('photo')->store('images/photo','custom') : null
         ]);
 
 
@@ -60,12 +68,16 @@ class UserController extends Controller
         }
     }
     public function edit($user_id){
+        if(auth()->user()->id != 1 && $user_id == 1){
+            return redirect()->route('admin.user')->with(['status' => 'warning', 'sms' => __('No Permission')]);
+        }
         $data['user'] = DB::table('users')->find($user_id);
-        $data['roles'] = DB::table('roles')->get();
+        $data['roles'] = DB::table('roles')->where('id','!=', auth()->user()->id == 1 ? null : 1)->get();
 
         return view('backends.users.edit', $data);
     }
     public function update(Request $r, $user_id){
+
 
         $validation = Validator::make($r->all(),[
             'name' => 'required',
@@ -87,6 +99,7 @@ class UserController extends Controller
         ];
 
         $oldUser = DB::table('users')->find($user_id);
+
         if($oldUser != $r->username){
             $find = DB::table('users')->where('username', $r->username)->whereNot('id', $user_id)->exists();
             if($find){
@@ -107,6 +120,13 @@ class UserController extends Controller
             $data['password'] = Hash::make($r->password);
         }
 
+        if($r->hasFile('photo')){
+            if(Storage::disk('custom')->exists($oldUser->photo)){
+                Storage::disk('custom')->delete($oldUser->photo);
+            }
+            $data['photo'] = $r->file('photo')->store('images/photo','custom');
+        }
+
         $u = DB::table('users')->where('id', $user_id)->update($data);
 
         if($u == true){
@@ -116,6 +136,11 @@ class UserController extends Controller
         }
     }
     public function delete($user_id){
+        $old = DB::table('users')->find($user_id);
+
+        if(Storage::disk('custom')->exists($old->photo)){
+            Storage::disk('custom')->delete($old->photo);
+        }
         $d = DB::table('users')->where('id', $user_id)->delete();
         if($d == true){
             return redirect()->route('admin.user')->with(['status' => 'success', 'sms' => __('Delete Successfully')]);

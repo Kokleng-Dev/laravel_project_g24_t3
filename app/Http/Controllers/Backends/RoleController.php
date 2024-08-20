@@ -10,6 +10,7 @@ class RoleController extends Controller
 {
     public function index(){
 
+        sleep(2);
         $data['roles'] = DB::table('roles')->paginate(10);
 
         return view('backends.roles.index', $data);

@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         <a href="{{route('admin.user')}}" class="btn btn-sm btn-danger"><i class="fa fa-reply"></i> {{__('Back')}}</a>
-        <form action="{{ route('admin.user.update', $user->id) }}" class="my-2" method="POST">
+        <form action="{{ route('admin.user.update', $user->id) }}" class="my-2" method="POST" enctype="multipart/form-data">
             @csrf
 
 
@@ -48,6 +48,10 @@
                     <div class="mb-3">
                         <label for="password">{{__('Password')}}</label>
                         <input type="text" class="form-control" name="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo">{{__('Photo')}}</label>
+                        <input type="file" accept="image/*" class="form-control" name="photo" id="photo">
                     </div>
                 </div>
                 <div class="col-12">

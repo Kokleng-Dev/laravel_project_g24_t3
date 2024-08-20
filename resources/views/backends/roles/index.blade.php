@@ -8,7 +8,9 @@
         <h2><i class="fa fa-user-check"></i> {{__('Role')}}</h2>
     </div>
     <div class="card-header">
+        @if(checkPermission('role','create'))
         <a href="{{route('admin.role.create')}}" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> {{__('Create')}}</a>
+        @endif
         <div class="table-responsive my-2">
             <table class="table table-sm table-hover table-bordered text-center">
                 <thead>

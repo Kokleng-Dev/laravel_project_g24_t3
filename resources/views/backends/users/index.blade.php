@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>{{__('Photo')}}</th>
                         <th>{{__('Name')}}</th>
                         <th>{{__('Role')}}</th>
                         <th>{{__('Username')}}</th>
@@ -27,19 +28,22 @@
                 <tbody>
                     @foreach ($users as $index => $user)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->role_name }}</td>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>
+                            <td  style="vertical-align: middle;">{{ $index + 1 }}</td>
+                            <td  style="vertical-align: middle;">
+                                <img src="{{ asset($user->photo) }}" width="50" height="50" class="rounded-circle" alt="">
+                            </td>
+                            <td  style="vertical-align: middle;">{{ $user->name }}</td>
+                            <td  style="vertical-align: middle;">{{ $user->role_name }}</td>
+                            <td  style="vertical-align: middle;">{{ $user->username }}</td>
+                            <td  style="vertical-align: middle;">{{ $user->email }}</td>
+                            <td  style="vertical-align: middle;">
                                 @if($user->status == 1)
                                     <span class="badge bg-primary">{{__('Active')}}</span>
                                 @else
                                     <span class="badge bg-danger">{{__('Inactive')}}</span>
                                 @endif
                             </td>
-                            <td>
+                            <td  style="vertical-align: middle;">
                              @if(checkPermission('user','edit'))
                                 <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm btn-success"><i class="fa fa-pen"></i> {{__('Edit')}}</a>
                             @endif
