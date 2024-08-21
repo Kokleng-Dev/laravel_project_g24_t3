@@ -1,20 +1,20 @@
 @extends('backends.layouts.master')
 @section('title')
-    {{__('Product')}}
+    {{__('Banner')}}
 @endsection
 @section('content')
    <div class="card">
     <div class="card-header text-primary">
-        <h2><i class="fa fa-users"></i> {{__('Product')}}</h2>
+        <h2><i class="fa fa-users"></i> {{__('Banner')}}</h2>
     </div>
     <div class="card-header">
         @if(checkPermission('product','create'))
-            <a href="{{route('admin.product.create')}}" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> {{__('Create')}}</a>
+            <a href="{{route('admin.banner.create')}}" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> {{__('Create')}}</a>
         @endif
         <div class="row">
             <div class="col"></div>
             <div class="col-3">
-                <form action="{{ route('admin.product') }}" method="GET">
+                <form action="{{ route('admin.banner') }}" method="GET">
                     <div class="input-group">
                         <input type="search" value="{{ $search }}" class="form-control" name="search">
                         <div class="input-group-append">
@@ -31,29 +31,29 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{__('Category')}}</th>
+                        <th>{{__('Photo')}}</th>
                         <th>{{__('Name')}}</th>
-                        <th>{{__('Price')}}</th>
                         <th>{{__('Note')}}</th>
                         <th>{{__('Action')}}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $index => $product)
+                    @foreach ($banners as $index => $banner)
                         <tr>
                             <td  style="vertical-align: middle;">{{ $index + 1 }}</td>
-                            <td  style="vertical-align: middle;">{{ $product->product_category_name }}</td>
-                            <td  style="vertical-align: middle;">{{ $product->name }}</td>
-                            <td  style="vertical-align: middle;">${{ number_format($product->price,2)}}</td>
-                            <td  style="vertical-align: middle;">{{ $product->note }}</td>
                             <td  style="vertical-align: middle;">
-                             @if(checkPermission('product','edit'))
-                                <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-sm btn-success"><i class="fa fa-pen"></i> {{__('Edit')}}</a>
+                                <img src="{{ asset($banner->photo) }}" class="rounded" width="50" alt="">
+                            </td>
+                            <td  style="vertical-align: middle;">{{ $banner->name }}</td>
+                            <td  style="vertical-align: middle;">{{ $banner->note }}</td>
+                            <td  style="vertical-align: middle;">
+                             @if(checkPermission('banner','edit'))
+                                <a href="{{ route('admin.banner.edit', $banner->id) }}" class="btn btn-sm btn-success"><i class="fa fa-pen"></i> {{__('Edit')}}</a>
                             @endif
 
-                                @if(checkPermission('product','delete'))
+                                @if(checkPermission('banner','delete'))
                                     @php
-                                        $btnDelete = '<a href="' . route('admin.product.delete', $product->id) . '" class="btn btn-sm btn-danger"> ' . __('Yes') . '</a>';
+                                        $btnDelete = '<a href="' . route('admin.bulk.delete', $banner->id) . '?per=banner&tbl=banners' . '" class="btn btn-sm btn-danger"> ' . __('Yes') . '</a>';
                                         $btnDelete .= '<span class="btn btn-sm btn-dark ml-1 popNo">'. __('No') .'</span>';
                                     @endphp
 
@@ -67,7 +67,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                {{ $products->links('pagination::bootstrap-4') }}
+                {{ $banners->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

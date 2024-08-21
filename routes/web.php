@@ -18,8 +18,34 @@ Route::group(['namespace' => 'App\Http\Controllers\Backends', 'prefix' => '/admi
     Route::get('/', 'HomeController@index')->name('admin.home');
     Route::post('/test', 'HomeController@test')->name('admin.home.test');
 
-    Route::get('/product', 'ProductController@index')->name('admin.product')->middleware('UserPermission:product,view');
+
+    //product category
     Route::get('/product/category', 'ProductCategoryController@index')->name('admin.product.category')->middleware('UserPermission:product_category,view');
+    Route::get('/product/category/create', 'ProductCategoryController@create')->name('admin.product_category.create')->middleware('UserPermission:product_category,create');
+    Route::post('/product/category/store', 'ProductCategoryController@store')->name('admin.product_category.store')->middleware('UserPermission:product_category,create');
+    Route::get('/product/category/{product_category_id}/edit', 'ProductCategoryController@edit')->name('admin.product_category.edit')->middleware('UserPermission:product_category,edit');
+    Route::post('/product/category/{product_category_id}/update', 'ProductCategoryController@update')->name('admin.product_category.update')->middleware('UserPermission:product_category,edit');
+    Route::get('/product/category/{product_category_id}/delete', 'ProductCategoryController@delete')->name('admin.product_category.delete')->middleware('UserPermission:product_category,delete');
+
+    //product
+    Route::get('/product', 'ProductController@index')->name('admin.product')->middleware('UserPermission:product,view');
+    Route::get('/product/create', 'ProductController@create')->name('admin.product.create')->middleware('UserPermission:product,create');
+    Route::post('/product/store', 'ProductController@store')->name('admin.product.store')->middleware('UserPermission:product,create');
+    Route::get('/product/{product_id}/edit', 'ProductController@edit')->name('admin.product.edit')->middleware('UserPermission:product,edit');
+    Route::post('/product/{product_id}/update', 'ProductController@update')->name('admin.product.update')->middleware('UserPermission:product,edit');
+    Route::get('/product/{product_id}/delete', 'ProductController@delete')->name('admin.product.delete')->middleware('UserPermission:product,delete');
+
+
+     //banner
+     Route::get('/banner', 'BannerController@index')->name('admin.banner')->middleware('UserPermission:banner,view');
+     Route::get('/bulk/create', 'BannerController@create')->name('admin.banner.create')->middleware('UserPermission:banner,create');
+     Route::get('/banner/{banner_id}/edit', 'BannerController@edit')->name('admin.banner.edit')->middleware('UserPermission:banner,edit');
+
+
+     //bulk controller
+     Route::post('/bulk/store', 'BulkController@store')->name('admin.bulk.store');
+     Route::post('/bulk/{bulk_id}/update', 'BulkController@update')->name('admin.bulk.update');
+     Route::get('/bulk/{bulk_id}/delete', 'BulkController@delete')->name('admin.bulk.delete');
 
 
     // role

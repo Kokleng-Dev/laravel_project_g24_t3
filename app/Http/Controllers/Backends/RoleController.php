@@ -9,9 +9,7 @@ use DB;
 class RoleController extends Controller
 {
     public function index(){
-
-        sleep(2);
-        $data['roles'] = DB::table('roles')->paginate(10);
+        $data['roles'] = DB::table('roles')->where('id','!=', auth()->user()->id == 1 ? null : 1)->paginate(10);
 
         return view('backends.roles.index', $data);
     }

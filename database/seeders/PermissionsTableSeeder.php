@@ -59,6 +59,14 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
+            5 => 
+            array (
+                'id' => 7,
+                'name' => 'Banner',
+                'alias' => 'banner',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
         ));
         
         

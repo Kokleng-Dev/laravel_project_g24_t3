@@ -11,6 +11,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+  <link rel="shortcut icon" href="{{ asset(company()->photo) }}" type="image/x-icon">
+
   @stack('css')
 </head>
 <body class="hold-transition sidebar-mini">

@@ -45,10 +45,27 @@
                         </p>
                     </a>
                 </li>
+                @if(checkPermission('banner','view'))
+                <li class="nav-item">
+                    <a href="{{ route('admin.banner') }}" class="nav-link {{ request()->route()->getName() == 'admin.banner' ||
+                    request()->route()->getName() == 'admin.banner.edit' ||
+                    request()->route()->getName() == 'admin.banner.create' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>
+                            {{ __('Banner') }}
+                            {{-- <span class="right badge badge-danger">New</span> --}}
+                        </p>
+                    </a>
+                </li>
+                @endif
                 @php
                     $productManagements = [
                         'admin.product.category',
-                        'admin.product'
+                        'admin.product',
+                        'admin.product_category.create',
+                        'admin.product_category.edit',
+                        'admin.product.create',
+                        'admin.product.edit',
                     ];
                 @endphp
                 <li class="nav-item {{  in_array(request()->route()->getName(), $productManagements) ? 'menu-open' : '' }}">
@@ -64,7 +81,9 @@
                     <ul class="nav nav-treeview">
                         @if(checkPermission('product_category','view'))
                             <li class="nav-item">
-                                <a href="{{ route('admin.product.category') }}" class="nav-link {{ request()->route()->getName() == 'admin.product.category' ? 'active' : '' }}">
+                                <a href="{{ route('admin.product.category') }}" class="nav-link {{ request()->route()->getName() == 'admin.product.category' ||
+                                request()->route()->getName() == 'admin.product_category.create' ||
+                                request()->route()->getName() == 'admin.product_category.edit' ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-arrow-alt-circle-right"></i>
                                     <p>
                                     {{ __('lb.product_category') }}
@@ -75,7 +94,9 @@
                         @endif
                         @if(checkPermission('product','view'))
                         <li class="nav-item">
-                            <a href="{{ route('admin.product') }}" class="nav-link {{ request()->route()->getName() == 'admin.product' ? 'active' : '' }}">
+                            <a href="{{ route('admin.product') }}" class="nav-link {{ request()->route()->getName() == 'admin.product' ||
+                            request()->route()->getName() == 'admin.product.create' ||
+                            request()->route()->getName() == 'admin.product.edit' ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-arrow-alt-circle-right"></i>
                                 <p>
                                     {{ __('lb.product') }}
